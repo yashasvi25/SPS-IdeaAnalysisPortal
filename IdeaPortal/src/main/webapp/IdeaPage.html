@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Idea Analysis Portal</title>
+    <link rel="icon" href="/images/icon.jpeg" />
+
+    <!-- fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700" rel="stylesheet" type="text/css" />
+    <script src="https://use.fontawesome.com/releases/v5.13.0/js/all.js" crossorigin="anonymous"></script>
+    <!-- Bootstrap and CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.18/css/bootstrap-select.css" />
+
+    <link rel="stylesheet" href="css/idea.css">
+
+    <!-- Material Design Bootstrap -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">
+
+  </head>
+
+  <body onload="fetchIdea();">
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/dashboard.html">Dashboard</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/feed.html">Feed</a>
+            </li>
+            </ul>
+
+            <form id="logoutform" method="GET" action="/logout">
+            </form>
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit" form="logoutform" value="Submit">Logout</button>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+    <div class="row">
+        <div class="col-md-4">
+            <br>
+            <div class="row">
+                <div class="col-md-6">
+                    <form id = "upvote-form" method = "POST" action="/ideaVote?voteValue=1">
+                    </form>
+                    <div class="modal-footer d-flex justify-content-center">
+                        <button class="btn btn-success" type="submit" form="upvote-form" value="Submit">Upvote</button>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <form id = "downvote-form" method = "POST" action="/ideaVote?voteValue=-1">
+                    </form>
+                    <div class="modal-footer d-flex justify-content-center">
+                        <button class="btn btn-danger" type="submit" form="downvote-form" value="Submit">Downvote</button>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center">
+                <h2 class="section-heading text-uppercase">Idea Details</h2>
+            </div>
+            <br>
+            <div class="text-center">
+            <div id="ideainfo-container">
+                <!-- Javascript appends personal info here -->
+            </div>
+            </div>
+            
+        </div>
+        <div class="col-md-8">
+            <br>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="text-center">
+                        <a href="" class="btn btn-default btn-rounded mb-4" data-toggle="modal" data-target="#addCommentForm">Add Comment</a>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="text-center">
+                        <a href="" class="btn btn-default btn-rounded mb-4" data-toggle="modal" data-target="#addSurveyForm">Fill Survey</a>
+                    </div>
+                </div>
+            </div>
+            
+            <br>
+            <div class="text-center">
+                <h2 class="section-heading text-uppercase">Comments</h2>
+            </div>
+            <br>
+            <div class="card-deck mt-3" style="margin-left: 0rem;"></div>
+            <div id="comments-container">
+                <!-- Javascript appends ideas here -->
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <div class="modal fade" id="addCommentForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-center">
+                    <h4 class="modal-title w-100 font-weight-bold">Add Comment</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            <!--Form to take product idea input-->
+                <form id = "postcomment-form" method = "POST" action = "/ideaComments">
+                    <div class="modal-body mx-3">
+                        <div class="md-form mb-5">
+                            <i class="fas fa-comment-dots prefix grey-text"></i>
+                            <label for="text">Comment</label>
+                            <textarea type="text" name= "text" id="text" class="form-control validate" required></textarea>
+                        </div>
+                        <div class="md-form mb-5">
+                            <i class="fas fa-comment-dots prefix grey-text"></i>
+                            <label for="suggestion">Suggestion</label>
+
+                            <textarea type="text" name= "suggestion" id="suggestion" class="form-control validate" required></textarea>
+                        </div>
+                    </div>
+                </form>
+                <div class="modal-footer d-flex justify-content-center">
+                    <button class="btn btn-default" type="submit" form="postcomment-form" value="Submit">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="addSurveyForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-center">
+                    <h4 class="modal-title w-100 font-weight-bold">Survey</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            <!--Form to take product idea input-->
+                <form id = "postsurvey-form" method = "POST" action="/ideaSurvey">
+                    <div class="modal-body mx-3">
+                        <div class="form-group">
+                        <i class="fas fa-address-book prefix grey-text"></i>
+                        <label for="ageGroupCount">Suitable Age Group</label>
+                        <select id="ageGroupCount" name="ageGroupCount" class="selectpicker show-menu-arrow form-control" data-live-search="true">
+                            <option value="0">0-14</option>
+                            <option value="1">15-24</option>
+                            <option value="2">25-65</option>
+                            <option value="3">>65</option>                         
+                        </select>
+                        </div>
+                    </div>
+                </form>
+                <div class="modal-footer d-flex justify-content-center">
+                    <button class="btn btn-default" type="submit" form="postsurvey-form" value="Submit">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Bootstrap JS-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.18/js/bootstrap-select.min.js"></script>
+
+    <!-- MDB core JavaScript -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js"></script>
+    <script src="scripts/idea.js"></script>
+
+  </body>
+</html>

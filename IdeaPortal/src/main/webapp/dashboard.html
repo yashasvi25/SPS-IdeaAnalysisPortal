@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Idea Analysis Portal</title>
+    <link rel="icon" href="/images/icon.jpeg" />
+
+    <!-- fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700" rel="stylesheet" type="text/css" />
+    <script src="https://use.fontawesome.com/releases/v5.13.0/js/all.js" crossorigin="anonymous"></script>
+    <!-- Bootstrap and CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.18/css/bootstrap-select.css" />
+
+    <link rel="stylesheet" href="css/dashboard.css">
+
+    <!-- Material Design Bootstrap -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">
+
+  </head>
+
+  <body id="page-top" onload="addIdeasToDashboard();">
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/dashboard.html">Dashboard</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/feed.html">Feed</a>
+            </li>
+            </ul>
+
+            <form id="logoutform" method="GET" action="/logout">
+            </form>
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit" form="logoutform" value="Submit">Logout</button>
+        </div>
+    </nav>
+    <div class="modal fade" id="updateInfoForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-center">
+                    <h4 class="modal-title w-100 font-weight-bold">Update Information</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            <!--Form to take information input-->
+                <form id = "updateinfo-form" method = "POST" enctype="multipart/form-data">
+                    <div class="modal-body mx-3">
+                        <div class="md-form mb-5">
+                            <i class="fas fa-address-book prefix grey-text"></i>
+                            <input type="text" name= "name" id="name" class="form-control validate" required>
+                            <label data-error="wrong" data-success="right" for="name">Name</label>
+                        </div>
+                        <div class="md-form mb-5">
+                            <i class="fas fa-building prefix grey-text"></i>
+                            <input type="date" name= "dob" id="dob" class="form-control validate" required>
+                            <label data-error="wrong" data-success="right" for="dob">Date of Birth</label>
+                        </div>
+                        <div class="md-form mb-5">
+                            <i class="fas fa-building prefix grey-text"></i>
+                            <input type="text" name= "teamname" id="teamname" class="form-control validate" required>
+                            <label data-error="wrong" data-success="right" for="teamname">Team Name</label>
+                        </div>
+                        <div class="md-form mb-5">
+                            <i class="fas fa-camera prefix grey-text"></i>
+                            <input type="file" name="image" accept="image/gif, image/jpeg, image/png, image/jpg">
+                        </div>
+                    </div>
+                </form>
+                <div class="modal-footer d-flex justify-content-center">
+                    <button class="btn btn-default" type="submit" form="updateinfo-form" value="Submit">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="postIdeaForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-center">
+                    <h4 class="modal-title w-100 font-weight-bold">Post an Idea</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            <!--Form to take product idea input-->
+                <form id = "postidea-form" method = "POST" enctype="multipart/form-data">
+                    <div class="modal-body mx-3">
+                        <div class="md-form mb-5">
+                            <i class="fas fa-address-book prefix grey-text"></i>
+                            <input type="text" name= "title" id="title" class="form-control validate" required>
+                            <label data-error="wrong" data-success="right" for="title">Idea Title</label>
+                        </div>
+                        <div class="form-group">
+                        <i class="fas fa-address-book prefix grey-text"></i>
+                        <label for="category">Category</label>
+                        <select id="category" name="category" class="selectpicker show-menu-arrow form-control" data-live-search="true">
+                            <option value="Sustainability">Sustainability</option>
+                            <option value="Privacy">Privacy</option>
+                            <option value="Agriculture">Agriculture</option>
+                            <option value="Tourism">Tourism</option>
+                            <option value="Other">Other</option>                            
+                        </select>
+                        </div>
+                        <div class="md-form mb-5">
+                            <i class="fas fa-comment-dots prefix grey-text"></i>
+                            <textarea type="text" name= "description" id="description" class="form-control validate" required></textarea>
+                        </div>
+                        <div class="md-form mb-5">
+                            <i class="fas fa-camera prefix grey-text"></i>
+                            <input type="file" name="image" accept="image/gif, image/jpeg, image/png, image/jpg">
+                        </div>
+                        <!-- <div class="md-form mb-5">
+                            <i class="fas fa-camera prefix grey-text"></i>
+                            <input type="file" name="video" accept="video/mp4, 	video/webm, video/ogg">
+                        </div> -->
+                    </div>
+                </form>
+                <div class="modal-footer d-flex justify-content-center">
+                    <button class="btn btn-default" type="submit" form="postidea-form" value="Submit">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+    <div class="row">
+        <div class="col-md-4">
+            <br>
+            <div class="text-center">
+                <a href="" class="btn btn-default btn-rounded mb-4" data-toggle="modal" data-target="#updateInfoForm">Update Information</a>
+            </div>
+            <br>
+            <div class="text-center">
+                <h2 class="section-heading text-uppercase">Personal Details</h2>
+            </div>
+            <br>
+            <div class="text-center">
+            <div id="info-container">
+                <!-- Javascript appends personal info here -->
+            </div>
+            </div>
+            <!-- <div class="row">
+                <div class="col-md-6">
+                    <label>User Id</label>
+                </div>
+                <div class="col-md-6">
+                    <p>Kshiti123</p>
+                </div>
+            </div> -->
+            
+        </div>
+        <div class="col-md-8">
+            <br>
+            <div class="text-center">
+                <a href="" class="btn btn-default btn-rounded mb-4" data-toggle="modal" data-target="#postIdeaForm">Post An Idea</a>
+            </div>
+            <br>
+            <div class="text-center">
+                <h2 class="section-heading text-uppercase">Previous Ideas Submitted</h2>
+            </div>
+            <br>
+            <div class="card-deck mt-3" style="margin-left: 0rem;"></div>
+            <div id="ideas-container">
+                <!-- Javascript appends ideas here -->
+            </div>
+        </div>
+    </div>
+    </div>
+
+
+
+    <!-- Bootstrap JS-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.18/js/bootstrap-select.min.js"></script>
+
+    <!-- MDB core JavaScript -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js"></script>
+    <script src="scripts/dashboard.js"></script>
+  </body>
+</html>
